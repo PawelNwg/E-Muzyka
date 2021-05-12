@@ -31,7 +31,8 @@ namespace E_Muzyka.Controllers
             string email = User.Identity.Name;
             AppUser user = _context.Users.FirstOrDefault(u => u.Email == email);
             if (user == null) return null;
-            var List = await _context.Albums.Where(o => o.AppUserId == user.Id).ToListAsync();
+            var List = await _context.Albums.Where(o => o.AppUser.Id == user.Id).ToListAsync();
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 List = List.Where(a => searchString.Contains(a.Artist)
@@ -61,8 +62,9 @@ namespace E_Muzyka.Controllers
             {
                 return NotFound();
             }
+            AlbumDTO albumMapped = mapper.Map<AlbumDTO>(album);
 
-            return View(album);
+            return View(albumMapped);
         }
 
         public async Task<IActionResult> ShowAlbumsTracks(int? id)
@@ -72,7 +74,7 @@ namespace E_Muzyka.Controllers
                 return NotFound();
             }
 
-            var tracks = await _context.Tracks
+            var tracks = await _context.Tracks.Include(o => o.Album)
                 .Where(a => a.AlbumId == id).ToListAsync();
 
             if (tracks == null)
@@ -87,11 +89,6 @@ namespace E_Muzyka.Controllers
             }
 
             return View(trackDTO);
-        }
-
-        private bool AlbumExists(int id)
-        {
-            return _context.Albums.Any(e => e.Id == id);
         }
     }
 }

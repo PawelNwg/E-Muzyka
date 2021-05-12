@@ -24,9 +24,6 @@ namespace E_Muzyka.Controllers
 
         public IActionResult Index()
         {
-            Album a = new Album();
-            a.Id = 19;
-            AlbumDTO ad = mapper.Map<AlbumDTO>(a);
             return View();
         }
 

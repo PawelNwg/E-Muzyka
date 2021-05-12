@@ -35,5 +35,8 @@ namespace E_Muzyka.ModelDTO
         public int Year { get; set; }
 
         public virtual List<Track> Tracks { get; set; }
+
+        [Display(Name = "Dostawca")]
+        public virtual AppUser AppUser { get; set; }
     }
 }

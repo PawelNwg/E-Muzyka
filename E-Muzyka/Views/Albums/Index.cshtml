@@ -3,23 +3,23 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h1>Index</h1>
+<head>
+    <link rel="stylesheet" href="~/css/customStyle.css" />
+</head>
+<h1>Albumy</h1>
 
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
             Filtruj: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="Index">Back to Full List</a>
+            <input type="submit" value="Szukaj" class="btn buttonLogin text-white" /> |
+            <a class="btn buttonLogin text-white" asp-action="Index"> Wróć</a>
         </p>
     </div>
 </form>
-@*<p>
-        <a asp-action="Create">Create New</a>
-    </p>*@
+
 <table class="table">
-    <thead>
+    <thead class="tableColor text-white">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Artist)
@@ -32,6 +32,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AppUser)
             </th>
             <th></th>
         </tr>
@@ -53,10 +56,11 @@
                     @Html.DisplayFor(modelItem => item.Year)
                 </td>
                 <td>
-                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |*@
-                    <a asp-action="ShowAlbumsTracks" asp-route-id="@item.Id">Tracks</a>
+                    @Html.DisplayFor(modelItem => item.AppUser.Name) - @Html.DisplayFor(modelItem => item.AppUser.Surname)
+                </td>
+                <td>
+                    <a class="btn buttonDetails text-white" asp-action="Details" asp-route-id="@item.Id">Szczegóły</a> |
+                    <a class="btn buttonDetails text-white" asp-action="ShowAlbumsTracks" asp-route-id="@item.Id">Utwory</a>
                 </td>
             </tr>
         }

@@ -25,6 +25,6 @@ namespace E_Muzyka.Models
         public int Year { get; set; }
 
         public virtual ICollection<Track> Tracks { get; set; }
-        public string AppUserId { get; internal set; }
+        public virtual AppUser AppUser { get; set; }
     }
 }

@@ -1,0 +1,27 @@
+﻿body {
+}
+
+.gradient {
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(11,87,45,1) 34%, rgba(65,26,88,1) 100%);
+}
+
+.borderLogin {
+    border-style: solid;
+    border-color: rgba(65,26,88,1);
+    border-width: 4px;
+    border-radius: 15px;
+}
+
+.buttonLogin, .tableColor {
+    background-color: rgba(65,26,88,1);
+}
+
+.buttonDetails {
+    background-color: rgba(11,87,45,1);
+}
+
+a {
+    color: rgba(11,87,45,1);
+    text-decoration: none;
+}

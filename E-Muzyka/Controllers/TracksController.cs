@@ -52,13 +52,8 @@ namespace E_Muzyka.Controllers
             {
                 return NotFound();
             }
-
-            return View(track);
-        }
-
-        private bool TrackExists(int id)
-        {
-            return _context.Tracks.Any(e => e.Id == id);
+            TrackDTO trackMapped = mapper.Map<TrackDTO>(track);
+            return View(trackMapped);
         }
     }
 }
