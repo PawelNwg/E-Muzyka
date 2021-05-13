@@ -10,6 +10,8 @@ using E_Muzyka.Models;
 using E_Muzyka.ModelDTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper.QueryableExtensions;
+using E_Muzyka.Pagination;
 
 namespace E_Muzyka.Controllers
 {
@@ -26,26 +28,25 @@ namespace E_Muzyka.Controllers
         }
 
         // GET: Albums
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, string currentFilter, int? pageNumber)
         {
             string email = User.Identity.Name;
             AppUser user = _context.Users.FirstOrDefault(u => u.Email == email);
             if (user == null) return null;
-            var List = await _context.Albums.Where(o => o.AppUser.Id == user.Id).ToListAsync();
+            var List = _context.Albums.Where(o => o.AppUser.Id == user.Id).ProjectTo<AlbumDTO>(mapper.ConfigurationProvider);
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                List = List.Where(a => searchString.Contains(a.Artist)
-                                       || searchString.Contains(a.Title) || searchString.Contains(a.Year.ToString())).ToList();
+                List = List.Where(a => a.Artist.ToLower().Contains(searchString)
+                                       || searchString.ToLower().Contains(a.Title.ToLower()) || searchString.Contains(a.Year.ToString()));
             }
-
-            List<AlbumDTO> albumDTO = new List<AlbumDTO>();
-            foreach (var item in List)
+            else
             {
-                albumDTO.Add(mapper.Map<AlbumDTO>(item));
+                searchString = currentFilter;
             }
 
-            return View(albumDTO);
+            int pageSize = 5;
+            return View(await PaginatedList<AlbumDTO>.CreateAsync(List.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Albums/Details/5
@@ -67,28 +68,22 @@ namespace E_Muzyka.Controllers
             return View(albumMapped);
         }
 
-        public async Task<IActionResult> ShowAlbumsTracks(int? id)
+        public async Task<IActionResult> ShowAlbumsTracks(int? id, string currentFilter, int? pageNumber)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var tracks = await _context.Tracks.Include(o => o.Album)
-                .Where(a => a.AlbumId == id).ToListAsync();
+            var tracks = _context.Tracks.Include(o => o.Album)
+                .Where(a => a.AlbumId == id).ProjectTo<TrackDTO>(mapper.ConfigurationProvider);
 
             if (tracks == null)
             {
                 return NotFound();
             }
-
-            List<TrackDTO> trackDTO = new List<TrackDTO>();
-            foreach (var item in tracks)
-            {
-                trackDTO.Add(mapper.Map<TrackDTO>(item));
-            }
-
-            return View(trackDTO);
+            int pageSize = 5;
+            return View(await PaginatedList<TrackDTO>.CreateAsync(tracks.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
     }
 }

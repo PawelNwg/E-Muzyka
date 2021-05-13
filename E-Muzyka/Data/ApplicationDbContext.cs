@@ -21,7 +21,21 @@ namespace E_Muzyka.Data
         {
             builder.Entity<Album>(entity =>
             {
-                entity.Property(x => x.Title).HasMaxLength(20).IsRequired();
+                entity.Property(x => x.Title).HasMaxLength(30).IsRequired();
+                entity.Property(x => x.Artist).HasMaxLength(30);
+                entity.Property(x => x.Year).HasMaxLength(4);
+                entity.Property(x => x.Version).HasMaxLength(20);
+            });
+            builder.Entity<Track>(entity =>
+            {
+                entity.Property(x => x.Title).HasMaxLength(30).IsRequired();
+                entity.Property(x => x.Artist).HasMaxLength(30);
+                entity.Property(x => x.Year).HasMaxLength(4);
+            });
+            builder.Entity<AppUser>(entity =>
+            {
+                entity.Property(x => x.Name).HasMaxLength(20);
+                entity.Property(x => x.Surname).HasMaxLength(30);
             });
             base.OnModelCreating(builder);
         }

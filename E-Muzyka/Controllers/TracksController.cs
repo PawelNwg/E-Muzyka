@@ -10,6 +10,7 @@ using E_Muzyka.Models;
 using E_Muzyka.ModelDTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper.QueryableExtensions;
 
 namespace E_Muzyka.Controllers
 {
@@ -28,13 +29,9 @@ namespace E_Muzyka.Controllers
         // GET: Tracks
         public async Task<IActionResult> Index()
         {
-            var List = await _context.Tracks.Include(t => t.Album).ToListAsync();
-            List<TrackDTO> trackDTO = new List<TrackDTO>();
-            foreach (var item in List)
-            {
-                trackDTO.Add(mapper.Map<TrackDTO>(item));
-            }
-            return View(trackDTO);
+            var List = await _context.Tracks.Include(t => t.Album).ProjectTo<TrackDTO>(mapper.ConfigurationProvider).ToListAsync();
+
+            return View(List);
         }
 
         // GET: Tracks/Details/5

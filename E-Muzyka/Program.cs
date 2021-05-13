@@ -1,5 +1,7 @@
 using E_Muzyka.Data;
+using E_Muzyka.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,7 +31,7 @@ namespace E_Muzyka
                     webBuilder.UseStartup<Startup>();
                 });
 
-        private static void CreateDbIfNotExists(IHost host)
+        private async static Task CreateDbIfNotExists(IHost host)
         {
             using (var scope = host.Services.CreateScope())
             {
@@ -37,7 +39,8 @@ namespace E_Muzyka
                 try
                 {
                     var context = services.GetRequiredService<ApplicationDbContext>();
-                    ApplicationInitializer.Initialize(context);
+                    var user = services.GetRequiredService<UserManager<AppUser>>();
+                    await ApplicationInitializer.Initialize(context, user);
                 }
                 catch (Exception ex)
                 {

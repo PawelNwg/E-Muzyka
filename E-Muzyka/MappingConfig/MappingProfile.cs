@@ -12,8 +12,11 @@ namespace E_Muzyka.MappingConfig
     {
         public MappingProfile()
         {
-            CreateMap<Album, AlbumDTO>().ReverseMap();
-            CreateMap<Track, TrackDTO>().ReverseMap();
+            CreateMap<Album, AlbumDTO>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(x => x.AppUser.Name))
+                .ForMember(dest => dest.Surname, opt => opt.MapFrom(x => x.AppUser.Surname));
+            CreateMap<Track, TrackDTO>()
+                .ForMember(dest => dest.AlbumTitle, opt => opt.MapFrom(x => x.Album.Title));
         }
     }
 }
