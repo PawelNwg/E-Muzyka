@@ -1,2 +1,5 @@
-# staz-pawel-nieweglowski
+# E-Muzyka
+
+Zarządzanie dostawcami muzycznymi reprezentującymi artystów oraz ich dyskografie.
+
 
